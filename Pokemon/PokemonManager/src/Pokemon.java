@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class Pokemon {
 	private String name;
 	private Type type;
@@ -6,6 +8,24 @@ public class Pokemon {
 	private static int nextNumber = 1; // Sinnvoller Initialwert. Alternativ
 										// kann abgefragt werden ob nextNumber
 										// bereits initialisiert wurde
+	private List<Swap> swaps;
+	private boolean swapAllow = false;
+
+	public List<Swap> getSwaps() {
+		return swaps;
+	}
+
+	public void addSwap(Swap swap) {
+		this.swaps.add(swap);
+	}
+
+	public boolean isSwapAllow() {
+		return swapAllow;
+	}
+
+	public void setSwapAllow(boolean swapAllow) {
+		this.swapAllow = swapAllow;
+	}
 
 	/*
 	 * Dieser Konstruktor ist sinnvoll, da die Parameter selbsterklaerend sind
@@ -72,6 +92,7 @@ public class Pokemon {
 		if (!this.trainer.hasPokemon(this)) {
 			this.trainer.givePokemon(this);
 		}
+		swapAllow = true;
 		System.out.println(this + " gehoert jetzt zu " + trainer);
 	}
 }

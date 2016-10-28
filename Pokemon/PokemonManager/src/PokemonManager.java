@@ -80,11 +80,14 @@ public class PokemonManager {
 		new Pokemon("ekans", Type.Poison, gary);
 		new Pokemon("Koffing", Type.Poison, gary);
 		new Pokemon("Muk", Type.Poison, morty);
+		Pokemon miew = new Pokemon("Miewtwo", Type.Water, ash);
 		Pokemon pika = new Pokemon("Pikachu", Type.Fire, gary);
-		pika.setTrainer(ash);
 
-		System.out.println("Trainer: " + PokeMgr.getTrainers());
+		/*System.out.println("Trainer: " + PokeMgr.getTrainers());
 		System.out.println(ash + " trainiert " + ash.getPokemons());
-		System.out.println("Poison Pokemon: " + PokeMgr.getAllPoisonPokemon());
+		System.out.println("Poison Pokemon: " + PokeMgr.getAllPoisonPokemon()); */
+		
+		System.out.println(Swap.execute(miew, pika));
+		
 	}
 }
