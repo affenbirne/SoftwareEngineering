@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Pokemon {
@@ -5,9 +6,7 @@ public class Pokemon {
 	private Type type;
 	private Trainer trainer;
 	private int number;
-	private static int nextNumber = 1; // Sinnvoller Initialwert. Alternativ
-										// kann abgefragt werden ob nextNumber
-										// bereits initialisiert wurde
+	private static int nextNumber = 1;
 	private List<Swap> swaps;
 	private boolean swapAllow = false;
 
@@ -28,21 +27,20 @@ public class Pokemon {
 	}
 
 	/*
-	 * Dieser Konstruktor ist sinnvoll, da die Parameter selbsterklaerend sind
-	 * und alle Attribute des Objekts initialisiert werden.
+	 * Konstruktor
 	 */
 	public Pokemon(String name, Type type) {
 		this.number = Pokemon.nextNumber;
 		Pokemon.nextNumber++;
 		this.name = name;
 		this.type = type;
+		//List is only an interface, thats why ArrayList is needed
+		this.swaps = new ArrayList<Swap>();
 	}
 	
 	public Pokemon(String name, Type type, Trainer trainer) {
-		this.number = Pokemon.nextNumber;
-		Pokemon.nextNumber++;
-		this.name = name;
-		this.type = type;
+		// call other Constructor
+		this(name, type);
 		this.setTrainer(trainer);
 	}
 
