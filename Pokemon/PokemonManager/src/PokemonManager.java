@@ -77,15 +77,19 @@ public class PokemonManager {
 		PokeMgr.getTrainers().add(morty);
 		
 		new Pokemon("Shiggy", Type.Water, ash);
-		new Pokemon("ekans", Type.Poison, gary);
+		Pokemon ekans = new Pokemon("Ekans", Type.Poison);
 		Pokemon kof = new Pokemon("Koffing", Type.Poison, gary);
 		Pokemon muk = new Pokemon("Muk", Type.Poison, morty);
 		Pokemon miew = new Pokemon("Miewtwo", Type.Water, ash);
 		Pokemon pika = new Pokemon("Pikachu", Type.Fire, gary);
 
 		System.out.println("Swaps:");
-		System.out.println(Swap.execute(miew, pika));
-		// Provoke an Error:
+		Swap swap = Swap.execute(miew, pika);
+		if (swap != null) {
+			System.out.println(swap);
+		}
+		// Provoke Errors:
 		Swap.execute(kof, muk);
+		Swap.execute(ekans, kof);
 	}
 }
