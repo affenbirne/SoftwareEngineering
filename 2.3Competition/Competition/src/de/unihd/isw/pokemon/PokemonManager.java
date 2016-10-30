@@ -1,46 +1,52 @@
+package de.unihd.isw.pokemon;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
+/**
+ * 
+ * @author David Kirk & Tornike Tsereteli
+ *
+ */
 public class PokemonManager {
-	/*
-	 * "Fuer welche Collection habe ich mich entschieden?" 
-	 * Ich habe mich fuer ArrayList als Liste von Pokemon eines Trainers 
-	 * und HashSet fuer alle Trainer im PokemonManager entschieden.
-	 * 
-	 * Collection		Vorteile					Nachteile
-	 * ------------------------------------------------------------------------
-	 * ArrayList		Elemente haben Index,	
-	 * 					Doppelte Elemente moeglich
-	 * 					direkter Zugriff moeglich
-	 * 
-	 * HashMap			schneller Zugriff			keine doppelten Elemente
-	 * 					geordnet
-	 * 
-	 * HashSet			schneller Zugriff			keine doppelten Elemente
-	 * 												ungeordnet
-	 * 
-	 * Die HashSet ermoeglicht die Verwaltung der Trainer die nicht geordnet erfolgen muss,
-	 * die ArrayList listet deren Pokemon auf, wobei es keine Doppelzuweisung geben darf.
+	/**
+	 * Set of all Trainers.
 	 */
 	private HashSet<Trainer> trainers;
 	
+	/**
+	 * Constructor.
+	 */
 	PokemonManager() {
 		trainers = new HashSet<Trainer>();
 	}
 	
-	public void givePokemonToTrainer(Pokemon pokemon, Trainer trainer) {
+	/**
+	 * 
+	 * @param pokemon Which Pokemon to give to the Trainer.
+	 * @param trainer Which Trainer to give the Pokemon to.
+	 */
+	public final void givePokemonToTrainer(final Pokemon pokemon,
+			final Trainer trainer) {
 		trainer.givePokemon(pokemon);
 	}
 
-	/*
-	 * Abfrage aller Pokemons eines Trainers
+	/**
+	 * 
+	 * @param trainer Whos Pokemon to get
+	 * @return Returns all Pokemon of the Trainer
 	 */
-	public ArrayList<Pokemon> getAllPokemonsOfTrainer(Trainer trainer) {
+	public final ArrayList<Pokemon> getAllPokemonsOfTrainer(
+			final Trainer trainer) {
 		return trainer.getPokemons();
 	}
 	
-	public HashSet<Pokemon> getAllPokemonByType(Type type) {
+	/**
+	 * 
+	 * @param type Which Type to filter
+	 * @return All Pokemon of the Type type
+	 */
+	public final HashSet<Pokemon> getAllPokemonByType(final Type type) {
 		HashSet<Pokemon> ret = new HashSet<Pokemon>();
 		Iterator<Trainer> it = trainers.iterator();
 		while (it.hasNext()) {
@@ -54,27 +60,36 @@ public class PokemonManager {
 		return ret;
 	}
 	
-	/*
-	 * Abfrage aller Pokemons vom Type Poison
+	/**
+	 * 
+	 * @return All Poison Pokemons
 	 */
-	public HashSet<Pokemon> getAllPoisonPokemon() {
+	public final HashSet<Pokemon> getAllPoisonPokemon() {
 		return this.getAllPokemonByType(Type.Poison);
 	}
 	
-	public HashSet<Trainer> getTrainers() {
+	/**
+	 * 
+	 * @return All Trainers
+	 */
+	public final HashSet<Trainer> getTrainers() {
 		return this.trainers;
 	}
 	
-	public static void main(String[] args) {
+	/**
+	 * main.
+	 * @param args Argumente
+	 */
+	public static void main(final String[] args) {
 		Trainer ash, gary, morty;
 		ash = new Trainer("Ash", "Ketchum");
 		gary = new Trainer("Gary", "Oak");
 		morty = new Trainer("Morty", "Smith");
 		
-		PokemonManager PokeMgr = new PokemonManager();
-		PokeMgr.getTrainers().add(ash);
-		PokeMgr.getTrainers().add(gary);
-		PokeMgr.getTrainers().add(morty);
+		PokemonManager pokeMgr = new PokemonManager();
+		pokeMgr.getTrainers().add(ash);
+		pokeMgr.getTrainers().add(gary);
+		pokeMgr.getTrainers().add(morty);
 		
 		Pokemon kof = new Pokemon("Koffing", Type.Poison, gary);
 		Pokemon muk = new Pokemon("Muk", Type.Poison, morty);
