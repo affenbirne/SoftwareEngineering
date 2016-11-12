@@ -34,7 +34,7 @@ public class Pokemon {
 	 */
 	public Pokemon(String name, Type type) {
 		this.name = name;
-		this.type = Type.Water;
+		this.type = type;
 		this.number = nextNumber;
 		nextNumber++;
 	}
@@ -151,7 +151,7 @@ public class Pokemon {
 					double cscore = c.getScores().get(this);
 					// get the score for the type +1 since ordinal
 					// starts with 0
-					if (cscore != 0) {
+					if (cscore != -1) {
 						double tscore = (this.getType().ordinal() + 1);
 						// normalize the score
 						double nscore = tscore * (cscore / (cscore+1));

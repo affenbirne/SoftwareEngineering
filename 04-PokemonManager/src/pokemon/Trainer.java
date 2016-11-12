@@ -78,7 +78,7 @@ public class Trainer {
 	 * @return
 	 */
 	public Pokemon getPokemon(int index) {
-		return null;
+		return this.pokemons.get(index);
 	}
 
 	/**
