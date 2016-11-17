@@ -8,7 +8,6 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.ArmListener;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -31,7 +30,9 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import pokemon.Competition;
 import pokemon.PokemonManager;
+import pokemon.Swap;
 import pokemon.data.Pokemon;
 import pokemon.data.Trainer;
 import pokemon.data.Type;
@@ -140,10 +141,27 @@ public class PokemonUI extends Dialog {
 		ctxtCompetition.setMenu(new Menu(ctxt));
 		
 		MenuItem ctxtDelete = new MenuItem(ctxt, SWT.PUSH);
-		ctxtDelete.setText("Delete Pokemon...");
+		ctxtDelete.setText("Delete Pokemon");
 		ctxtDelete.addListener(SWT.Selection, this.deletePokemon(table, shell));
 		
 		table.setMenu(ctxt);
+		
+		// Gray out menu items when no Pokemon selected
+		table.addListener(SWT.MouseUp, new Listener() {
+			public void handleEvent(Event e) {
+				if (e.button == 3) {
+					if (table.getSelection().length != 1) {
+						ctxtSwap.setEnabled(false);
+						ctxtCompetition.setEnabled(false);
+						ctxtDelete.setEnabled(false);	
+					} else {
+						ctxtSwap.setEnabled(true);
+						ctxtCompetition.setEnabled(true);
+						ctxtDelete.setEnabled(true);
+					}
+				}
+			}
+		});
 		
 		// auto size columns
 		for (int i = 0; i < table.getColumnCount(); i++) {
@@ -210,46 +228,13 @@ public class PokemonUI extends Dialog {
 										Pokemon poke = new Pokemon("New Pokemon", t);
 										poke.setTrainer(tr);
 										PokemonManager.addPokemon(poke);
+										PokemonManager.storePokemons();
 										fillTable(table);
 									}
 								});
 							}
 						}
 					});
-				}
-			}
-		};
-	}
-
-	private Listener competePokemon(Table table, Shell shell) {
-		return new Listener() {
-			public void handleEvent(Event e) {
-				if (table.getSelection().length > 0 && table.getSelection()[0] != null
-						&& table.getSelection()[0].getData() instanceof Pokemon) {
-					Pokemon p1 = (Pokemon) table.getSelection()[0].getData();
-					MenuItem mi = (MenuItem) e.widget;
-					Menu menu = mi.getMenu();
-					emptyMenu(menu);
-					
-					for (Pokemon p2 : pokemons) {
-						if (p1 == p2)
-							continue;
-						MenuItem pkmi = new MenuItem(menu, SWT.PUSH);
-						pkmi.setText(p2.toString());
-						pkmi.addSelectionListener(new SelectionAdapter() {
-							@Override
-							public void widgetSelected(final SelectionEvent e) {
-								MessageBox msg = new MessageBox(shell,
-										SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-								msg.setText("Let Pokemon compete?");
-								msg.setMessage(p1.toString() + "\n    VERSUS\n" + p2.toString());
-								if (msg.open() == SWT.YES) {
-									// TODO: Swap
-									fillTable(table);
-								}
-							}
-						});
-					}
 				}
 			}
 		};
@@ -279,7 +264,45 @@ public class PokemonUI extends Dialog {
 								msg.setMessage("Are you sure you want to swap the Pokemons:\n"
 										+ p1.toString() + "\n" + p2.toString());
 								if (msg.open() == SWT.YES) {
-									// TODO: Compete
+									Competition comp = new Competition();
+									comp.execute(p1, p2);
+									PokemonManager.storePokemons();
+									fillTable(table);
+								}
+							}
+						});
+					}
+				}
+			}
+		};
+	}
+
+	private Listener competePokemon(Table table, Shell shell) {
+		return new Listener() {
+			public void handleEvent(Event e) {
+				if (table.getSelection().length > 0 && table.getSelection()[0] != null
+						&& table.getSelection()[0].getData() instanceof Pokemon) {
+					Pokemon p1 = (Pokemon) table.getSelection()[0].getData();
+					MenuItem mi = (MenuItem) e.widget;
+					Menu menu = mi.getMenu();
+					emptyMenu(menu);
+					
+					for (Pokemon p2 : pokemons) {
+						if (p1 == p2)
+							continue;
+						MenuItem pkmi = new MenuItem(menu, SWT.PUSH);
+						pkmi.setText(p2.toString());
+						pkmi.addSelectionListener(new SelectionAdapter() {
+							@Override
+							public void widgetSelected(final SelectionEvent e) {
+								MessageBox msg = new MessageBox(shell,
+										SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+								msg.setText("Let Pokemon compete?");
+								msg.setMessage(p1.toString() + "\n    VERSUS\n" + p2.toString());
+								if (msg.open() == SWT.YES) {
+									Swap swap = new Swap();
+									swap.execute(p1, p2);
+									PokemonManager.storePokemons();
 									fillTable(table);
 								}
 							}
@@ -305,6 +328,7 @@ public class PokemonUI extends Dialog {
 						PokemonManager.getPokemons().remove(poke);
 						pokemons.remove(poke);
 						poke = null;
+						PokemonManager.storePokemons();
 						fillTable(table);
 					}
 				}
@@ -445,6 +469,7 @@ public class PokemonUI extends Dialog {
 						if (item.getData() != null && item.getData() instanceof Pokemon)
 							((Pokemon)item.getData()).setName(text.getText());
 						item.setText(1, text.getText());
+						PokemonManager.storePokemons();
 						text.dispose();
 					}
 					else if (e.detail == SWT.TRAVERSE_ESCAPE) {
@@ -465,6 +490,7 @@ public class PokemonUI extends Dialog {
 						((Pokemon) item.getData()).setType(t);
 					}
 					item.setText(2, t.name());
+					PokemonManager.storePokemons();
 					combo.dispose();
 				}
 			};
@@ -481,6 +507,7 @@ public class PokemonUI extends Dialog {
 						((Pokemon) item.getData()).setTrainer(tr);
 					}
 					item.setText(3, tr.toString());
+					PokemonManager.storePokemons();
 					combo.dispose();
 				}
 			};
@@ -496,6 +523,7 @@ public class PokemonUI extends Dialog {
 						((Pokemon) item.getData()).setSwapAllow(swapAllow);
 					}
 					item.setText(5, ""+swapAllow);
+					PokemonManager.storePokemons();
 					checkbox.dispose();
 				}
 			};

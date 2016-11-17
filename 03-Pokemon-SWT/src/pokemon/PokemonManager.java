@@ -1,5 +1,11 @@
 package pokemon;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import org.eclipse.swt.widgets.Display;
@@ -34,12 +40,40 @@ public class PokemonManager {
 		Shell shell = new Shell(display);
 		PokemonUI pui;
 		
-		// create Pokemons and Trainers
-		makePokemonData();
+		// load Everything
+		loadPokemon();
 		
 		// initialize and open the PokemonUI right here !
 		pui = new PokemonUI(shell, pokemons);
 		pui.open();
+	}
+	
+	public static void storePokemons() {
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(
+					new FileOutputStream("pokemon.dat"));
+			oos.writeObject(pokemons);
+			oos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static void loadPokemon() {
+		try {
+			ObjectInputStream ois = new ObjectInputStream(
+					new FileInputStream("pokemon.dat"));
+			pokemons = (ArrayList<Pokemon>) ois.readObject();
+			ois.close();
+		} catch (IOException e) {
+			makePokemonData();
+			storePokemons();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static void makePokemonData() {
