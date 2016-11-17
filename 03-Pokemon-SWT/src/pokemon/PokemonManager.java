@@ -1,7 +1,6 @@
 package pokemon;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -18,7 +17,7 @@ public class PokemonManager {
 	/***/
 	private static ArrayList<Pokemon> pokemons = new ArrayList<Pokemon>();
 
-	public static List<Pokemon> getPokemons() {
+	public static ArrayList<Pokemon> getPokemons() {
 		return pokemons;
 	}
 

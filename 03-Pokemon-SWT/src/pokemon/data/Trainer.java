@@ -23,6 +23,7 @@ public class Trainer {
 	public Trainer(String firstname, String lastname) {
 		this.firstname = firstname;
 		this.lastname = lastname;
+		trainers.add(this);
 	}
 
 	/**
@@ -96,4 +97,9 @@ public class Trainer {
 		return getFirstname() +" " + getLastname();
 	}
 	
+	private static ArrayList<Trainer> trainers = new ArrayList<Trainer>();
+	
+	public static ArrayList<Trainer> getTrainers() {
+		return trainers;
+	}
 }
