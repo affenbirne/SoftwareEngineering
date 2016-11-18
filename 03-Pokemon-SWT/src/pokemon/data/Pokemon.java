@@ -30,7 +30,7 @@ public class Pokemon implements Serializable {
 	/**	 */
 	private List<Swap> swaps = new ArrayList<Swap>();
 	/**	 */
-	private boolean swapAllow = true;
+	private boolean swapAllow = false;
 
 	/**	 */
 	private List<Competition> competitions = new ArrayList<Competition>();
