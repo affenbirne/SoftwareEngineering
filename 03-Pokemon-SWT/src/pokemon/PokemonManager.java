@@ -68,6 +68,11 @@ public class PokemonManager {
 					new FileInputStream("pokemon.dat"));
 			pokemons = (ArrayList<Pokemon>) ois.readObject();
 			ois.close();
+			for (Pokemon poke : pokemons) {
+				if (!Trainer.getTrainers().contains(poke.getTrainer())) {
+					Trainer.getTrainers().add(poke.getTrainer());
+				}
+			}
 		} catch (IOException e) {
 			makePokemonData();
 			storePokemons();
