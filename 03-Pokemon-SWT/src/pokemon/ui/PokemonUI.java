@@ -155,8 +155,12 @@ public class PokemonUI extends Dialog {
 						ctxtCompetition.setEnabled(false);
 						ctxtDelete.setEnabled(false);	
 					} else {
-						ctxtSwap.setEnabled(true);
-						ctxtCompetition.setEnabled(true);
+						// only Activate for pokemons with trainers
+						if (table.getSelection()[0].getData() instanceof Pokemon &&
+								((Pokemon)table.getSelection()[0].getData()).getTrainer() != null) {
+							ctxtSwap.setEnabled(true);
+							ctxtCompetition.setEnabled(true);	
+						}
 						ctxtDelete.setEnabled(true);
 					}
 				}
@@ -251,7 +255,7 @@ public class PokemonUI extends Dialog {
 					emptyMenu(menu);
 					
 					for (Pokemon p2 : pokemons) {
-						if (p1 == p2)
+						if (p1 == p2 || !p2.isSwapAllow())
 							continue;
 						MenuItem pkmi = new MenuItem(menu, SWT.PUSH);
 						pkmi.setText(p2.toString());
@@ -288,7 +292,7 @@ public class PokemonUI extends Dialog {
 					emptyMenu(menu);
 					
 					for (Pokemon p2 : pokemons) {
-						if (p1 == p2)
+						if (p1 == p2 || p2.getTrainer() != null)
 							continue;
 						MenuItem pkmi = new MenuItem(menu, SWT.PUSH);
 						pkmi.setText(p2.toString());
