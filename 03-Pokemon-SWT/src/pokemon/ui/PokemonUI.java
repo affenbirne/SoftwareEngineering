@@ -158,8 +158,16 @@ public class PokemonUI extends Dialog {
 						// only Activate for pokemons with trainers
 						if (table.getSelection()[0].getData() instanceof Pokemon &&
 								((Pokemon)table.getSelection()[0].getData()).getTrainer() != null) {
-							ctxtSwap.setEnabled(true);
+							if (((Pokemon)table.getSelection()[0].getData()).isSwapAllow()) {
+								ctxtSwap.setEnabled(true);
+							} else {
+								ctxtSwap.setEnabled(false);
+							}
 							ctxtCompetition.setEnabled(true);	
+						}
+						else {
+							ctxtSwap.setEnabled(false);
+							ctxtCompetition.setEnabled(false);
 						}
 						ctxtDelete.setEnabled(true);
 					}
