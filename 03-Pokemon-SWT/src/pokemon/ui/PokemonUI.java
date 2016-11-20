@@ -300,7 +300,7 @@ public class PokemonUI extends Dialog {
 					emptyMenu(menu);
 					
 					for (Pokemon p2 : pokemons) {
-						if (p1 == p2 || p2.getTrainer() != null)
+						if (p1 == p2 || p2.getTrainer() == null)
 							continue;
 						MenuItem pkmi = new MenuItem(menu, SWT.PUSH);
 						pkmi.setText(p2.toString());
